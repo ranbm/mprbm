@@ -7,6 +7,17 @@ type AllButtonsProps = {
 }
 
 const AllButtons = (props:AllButtonsProps) => {
+    const playSong = () => {
+        if(props.currentSong!==-1){
+            let audio = new Audio("/songs/Blur-Song2.mp3");
+            audio.play();
+    }
+        return (
+    < div >
+      <button onClick={playSong}>Play</button>
+    </div >
+  );
+    }
     const PlayNext = () => {
         if (props.currentSong<props.songs.length-1){
                 props.setCurrentSong(props.currentSong+1);
@@ -34,7 +45,7 @@ const AllButtons = (props:AllButtonsProps) => {
             </button>
             <button className="playButton">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                     className="bi bi-play-fill" viewBox="0 0 16 16">
+                     className="bi bi-play-fill" viewBox="0 0 16 16" onClick={playSong}>
                     <path
                         d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
                 </svg></button>
