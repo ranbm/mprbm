@@ -1,26 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import React, { useState } from 'react'
+import { DUMMY_SONGS, Song } from './data/Songs'
+import { SongList } from './components/songsLogic/SongList'
+import { Player } from './components/player/Player'
 
-function App() {
+function App () {
+  const [currentSongIdx, setCurrentSongIdx] = useState<number>(-1)
+  const songs:Array<Song> = DUMMY_SONGS
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React minor change
-        </a>
-      </header>
-    </div>
-  );
-}
+        <div className="main">
+            <Player songs={songs} currentSong={currentSongIdx} setCurrentSong={setCurrentSongIdx}/>
+            <p>show this</p>
+            <SongList songs={songs} currentSong={currentSongIdx} setCurrentSong={setCurrentSongIdx}/>
+        </div>
 
-export default App;
+  )
+}
+export default App
