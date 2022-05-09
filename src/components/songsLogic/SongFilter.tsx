@@ -1,13 +1,17 @@
-
-const SongFilter = (props:any) =>{
-    const dropdownChangeHandler = (event:any)=> {
-        props.onChangeFilter(event.target.value);
-    };
-    return (
+import React from 'react'
+type filterProps = {
+    onChangeFilter(artist:string):void
+    selected: string
+}
+const SongFilter = ({ onChangeFilter, selected }:filterProps) => {
+  const dropdownChangeHandler = (event:any) => {
+    onChangeFilter(event.target.value)
+  }
+  return (
         <div className="SongFilter">
             <div className="SongFilter__control">
                 <label>filter by artist</label>
-                <select value={props.selected} onChange={dropdownChangeHandler}>
+                <select value={selected} onChange={dropdownChangeHandler}>
                     <option value="all">all artists</option>
                     <option value='avi bitter'>avi bitter</option>
                     <option value="white screen">white screen</option>
@@ -15,6 +19,6 @@ const SongFilter = (props:any) =>{
                 </select>
             </div>
         </div>
-    );
-};
-export default SongFilter;
+  )
+}
+export default SongFilter

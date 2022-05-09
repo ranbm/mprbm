@@ -1,13 +1,13 @@
-import {Song} from "../../data/Songs";
 
-export const TitleAndTime = (props:{songs:Song[],currentSong:number}) =>{
-    if (props.currentSong!=-1){
-    return(
-    <p>{props.songs[props.currentSong].title}</p>
+import React from 'react'
+import { PlayerProps } from './Player'
+
+export const TitleAndTime = ({ songs, currentSong }:PlayerProps) => {
+  if (currentSong !== -1) {
+    return (
+    <p>{songs[currentSong].title}</p>
     )
-        }
-    else{
-        return (<p>hi and welcome</p>)
-
-    }
+  } else {
+    return (<p>hi and welcome</p>)
+  }
 }

@@ -1,40 +1,57 @@
-import {Song} from "../../data/Songs";
+import React, { useEffect, useState } from 'react'
+import { PlayerProps } from './Player'
 
-type AllButtonsProps = {
-    songs:Song[],
-    currentSong:number,
-    setCurrentSong(id:number):void
-}
+const AllButtons = ({ songs, currentSong, setCurrentSong }:PlayerProps) => {
+  const [audio] = useState(songs.map(song => {
+    return {
+      track: new Audio(song.link)
+    }
+  }))
 
-const AllButtons = (props:AllButtonsProps) => {
-    const playSong = () => {
-        if(props.currentSong!==-1){
-            let audio = new Audio("/songs/Blur-Song2.mp3");
-            audio.play();
+  const [isPlaying, setIsPlaying] = useState(false)
+  useEffect(() => {
+    if (currentSong !== -1) {
+      isPlaying ? audio[currentSong].track.play() : audio[currentSong].track.pause()
     }
-        return (
-    < div >
-      <button onClick={playSong}>Play</button>
-    </div >
-  );
+  }, [isPlaying])
+
+  const playSong = () => {
+    audio[currentSong].track.load()
+    setIsPlaying(true)
+  }
+  const pauseSong = () => {
+    setIsPlaying(false)
+  }
+
+  const playNext = () => {
+    const newSongIdx = currentSong < songs.length - 1 ? currentSong + 1 : 0
+    stopSong()
+    audio[newSongIdx].track.play()
+    setIsPlaying(true)
+    setCurrentSong(newSongIdx)
+  }
+  const playPrev = () => {
+    const newSongIdx = currentSong > 0 ? currentSong - 1 : songs.length - 1
+    stopSong()
+    audio[newSongIdx].track.play()
+    setCurrentSong(newSongIdx)
+  }
+  const stopSong = () => {
+    audio[currentSong].track.pause()
+    audio[currentSong].track.currentTime = 0
+    setIsPlaying(false)
+  }
+  const randomSong = () => {
+    const randomSongIdx = Math.floor(Math.random() * songs.length)
+    if (isPlaying) {
+      stopSong()
     }
-    const PlayNext = () => {
-        if (props.currentSong<props.songs.length-1){
-                props.setCurrentSong(props.currentSong+1);
-            }
-        else{
-            props.setCurrentSong(0);
-        }
-    }
-    const playPrev = () => {
-        if (props.currentSong>0){
-                props.setCurrentSong(props.currentSong-1);
-            }
-        else{
-            props.setCurrentSong(props.songs.length-1);
-        }
-    }
-    return (
+    setCurrentSong(randomSongIdx)
+    audio[randomSongIdx].track.play()
+    setIsPlaying(true)
+  }
+
+  return (
         <div>
             <button className="prevSongButton" onClick={playPrev}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -43,27 +60,27 @@ const AllButtons = (props:AllButtonsProps) => {
                         d="M.5 3.5A.5.5 0 0 0 0 4v8a.5.5 0 0 0 1 0V8.753l6.267 3.636c.54.313 1.233-.066 1.233-.697v-2.94l6.267 3.636c.54.314 1.233-.065 1.233-.696V4.308c0-.63-.693-1.01-1.233-.696L8.5 7.248v-2.94c0-.63-.692-1.01-1.233-.696L1 7.248V4a.5.5 0 0 0-.5-.5z"/>
                 </svg>
             </button>
-            <button className="playButton">
+            <button className="playButton" onClick={playSong}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                     className="bi bi-play-fill" viewBox="0 0 16 16" onClick={playSong}>
+                     className="bi bi-play-fill" viewBox="0 0 16 16">
                     <path
                         d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
                 </svg></button>
-        <button className="pauseButton">
+        <button className="pauseButton" onClick={pauseSong}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                  className="bi bi-pause-fill" viewBox="0 0 16 16">
                 <path
                     d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/>
             </svg>
         </button>
-        <button className="stopButton">
+        <button className="stopButton" onClick={stopSong}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                  className="bi bi-stop-fill" viewBox="0 0 16 16">
                 <path
                     d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"/>
             </svg>
             </button>
-            <button className="randomButton">
+            <button className="randomButton" onClick={randomSong}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                      className="bi bi-shuffle" viewBox="0 0 16 16">
                     <path fillRule="evenodd"
@@ -73,7 +90,7 @@ const AllButtons = (props:AllButtonsProps) => {
                 </svg>
 
         </button>
-        <button className="nextSongButton" onClick={PlayNext}>
+        <button className="nextSongButton" onClick={playNext}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                  className="bi bi-skip-forward-fill" viewBox="0 0 16 16">
                 <path
@@ -81,6 +98,6 @@ const AllButtons = (props:AllButtonsProps) => {
             </svg>
         </button>
             </div>
-)
+  )
 }
-export default AllButtons;
+export default AllButtons

@@ -1,32 +1,23 @@
-import {SongItem} from "./SongItem";
-import {useState} from "react";
-import SongFilter from "./SongFilter";
-import './styles/SongList.css';
-import {Song} from "../../data/Songs";
+import { SongItem } from './SongItem'
+import React, { useState } from 'react'
+import SongFilter from './SongFilter'
+import './styles/SongList.css'
+import { PlayerProps } from '../player/Player'
 
-type SongListProps = {
-    songs: Song[],
-    currentSong: number,
-    setCurrentSong(id:number):void,
-}
+export const SongList = ({ songs, currentSong, setCurrentSong }:PlayerProps) => {
+  const [filteredArtist, setFilteredArtist] = useState('')
 
-export const SongList = (props:SongListProps) => {
+  const filterChangeHandler = (selectedArtist:string) => {
+    setFilteredArtist(selectedArtist)
+  }
 
-    const [filteredArtist, setFilteredArtist] = useState('')
+  const filteredSongList = songs.filter(song => {
+    return song.artist === filteredArtist
+  })
 
-    const filterChangeHandler = (selectedArtist:string) => {
-        setFilteredArtist(selectedArtist);
-    };
+  const previewSongs = filteredSongList.length > 0 ? filteredSongList : songs
 
-    const filteredSongList = props.songs.filter(song => {
-        return song.artist === filteredArtist;
-    });
-
-
-    const previewSongs = filteredSongList.length > 0 ? filteredSongList : props.songs
-
-
-    return (
+  return (
         <div>
             <SongFilter
                 selected={filteredArtist}
@@ -47,17 +38,15 @@ export const SongList = (props:SongListProps) => {
                 {previewSongs.map((song) =>
                         <SongItem
                             Song={song}
-                            playNow={props.currentSong}
-                            setCurrentSong={props.setCurrentSong}
+                            playNow={currentSong}
+                            setCurrentSong={setCurrentSong}
                             key={song.id}
                             />
-                    )
+                )
                 }
                 </tbody>
 
-
             </table>
         </div>
-    );
+  )
 }
-

@@ -1,10 +1,11 @@
-import SearchForm from "./SearchForm";
+import SearchForm from './SearchForm'
+import React from 'react'
 
 const NewSearch = () => {
-    return (
+  return (
         <div>
             <SearchForm/>
         </div>
-    )
-};
-export default NewSearch;
+  )
+}
+export default NewSearch
