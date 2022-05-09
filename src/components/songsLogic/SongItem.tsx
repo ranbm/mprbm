@@ -13,9 +13,12 @@ export const SongItem = ({ Song, setCurrentSong, playNow }:SongItemProps) => {
   const clickHandler = () => {
     setLiked(true)
   }
+  const doubleClickHandler = () => {
+    setCurrentSong(Song.id)
+  }
 
   return (
-        <tr className="song" style={{ fontWeight }} onDoubleClick={() => setCurrentSong(Song.id)} key={Song.id}>
+        <tr className="song" style={{ fontWeight }} onDoubleClick={doubleClickHandler} key={Song.id}>
             <td className='title'>{Song.title}</td>
             <td className="artist">{Song.artist}</td>
             <td className="album">{Song.album}</td>
